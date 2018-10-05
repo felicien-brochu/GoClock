@@ -16,58 +16,57 @@ extern SelectTimeControlOptionUiHandler selectTimeControlOptionUiHandler;
 extern UiHandler *currentUiHandler;
 
 class SelectTimeControlUiHandler : public UiHandler {
-  
-  int currentTimeControlUi;
-  
+	int currentTimeControlUi;
+
 public:
 
-  SelectTimeControlUiHandler() {
-    currentTimeControlUi = 0;
-  }
-  
-  virtual ~SelectTimeControlUiHandler() {
-  }
+	SelectTimeControlUiHandler() {
+		currentTimeControlUi = 0;
+	}
 
-  virtual void tick(Clock *clock) {
-    buttonGestures.tick( clock );
+	virtual ~SelectTimeControlUiHandler() {}
 
-    int travel = buttonGestures.getNavigationTravel();
-    bool buttonPushed = buttonGestures.wasPushButtonPushed();
+	virtual void tick(Clock *clock) {
+		buttonGestures.tick(clock);
 
-    if (travel != 0) {
-      int optionCount = getNumberOfOptions();
-      currentTimeControlUi = (currentTimeControlUi + travel) % optionCount;
-      if (currentTimeControlUi < 0) {
-        currentTimeControlUi = optionCount + currentTimeControlUi;
-      }
-    }
+		int  travel       = buttonGestures.getNavigationTravel();
+		bool buttonPushed = buttonGestures.wasPushButtonPushed();
 
-    if (buttonPushed) {
-      selectTimeControlOptionUiHandler.setTimeControlUi( timeControls[ currentTimeControlUi ] );
-      currentUiHandler = &selectTimeControlOptionUiHandler;
-      beep();
-    }
+		if (travel != 0) {
+			int optionCount = getNumberOfOptions();
+			currentTimeControlUi = (currentTimeControlUi + travel) % optionCount;
 
-  }
-  
-  virtual void render(Clock *clock){
-    lcd2.beginRender( clock );
-    
-    TimeControlUi *tc = timeControls[ currentTimeControlUi ];
-    lcd2.printTopCenter( tc->getName() );
+			if (currentTimeControlUi < 0) {
+				currentTimeControlUi = optionCount + currentTimeControlUi;
+			}
+		}
 
-    lcd2.endRender();
-  }
+		if (buttonPushed) {
+			selectTimeControlOptionUiHandler.setTimeControlUi(timeControls[currentTimeControlUi]);
+			currentUiHandler = &selectTimeControlOptionUiHandler;
+			beep();
+		}
+	}
+
+	virtual void render(Clock *clock) {
+		lcd2.beginRender(clock);
+
+		TimeControlUi *tc = timeControls[currentTimeControlUi];
+		lcd2.printTopCenter(tc->getName());
+
+		lcd2.endRender();
+	}
 
 private:
-  int getNumberOfOptions() {
-    int optionCount = 0;
-    while (timeControls[ optionCount ] != NULL) {
-      optionCount++;
-    }
-    return optionCount;
-  }
-  
+
+	int getNumberOfOptions() {
+		int optionCount = 0;
+
+		while (timeControls[optionCount] != NULL) {
+			optionCount++;
+		}
+		return optionCount;
+	}
 };
 
-#endif
+#endif // ifndef __SelectTimeControlUiHandler_h__

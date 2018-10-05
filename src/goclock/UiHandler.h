@@ -8,18 +8,16 @@
 extern Buzzer buzzer;
 
 class UiHandler {
-
 public:
 
-  virtual void tick(Clock *clock) = 0;
-  virtual void render(Clock *clock) = 0;
-  
+	virtual void tick(Clock *clock)   = 0;
+	virtual void render(Clock *clock) = 0;
+
 protected:
 
-  virtual void beep() {
-    buzzer.playTone( 880, 40 );
-  }
-  
+	virtual void beep() {
+		buzzer.playTone(880, 40);
+	}
 };
 
-#endif
+#endif // ifndef __UiHandler_h__

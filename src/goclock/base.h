@@ -2,11 +2,10 @@
 #ifndef __base_h__
 #define __base_h__
 
-//Using types from avr
+// Using types from avr
 #include <avr/common.h>
 
 // for malloc and free
-#include <stdlib.h> 
+#include <stdlib.h>
 
-#endif
-
+#endif // ifndef __base_h__

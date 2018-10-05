@@ -5,13 +5,9 @@
 #include "TimeControlBase.h"
 
 class SuddenDeathTimeControl : public TimeControlBase {
-  
 public:
 
-  SuddenDeathTimeControl(uint32_t playersTime) : TimeControlBase( playersTime ) {
-  }
-
+	SuddenDeathTimeControl(uint32_t playersTime) : TimeControlBase(playersTime) {}
 };
 
-#endif
-
+#endif // ifndef __SuddenDeathTimeControl_h__

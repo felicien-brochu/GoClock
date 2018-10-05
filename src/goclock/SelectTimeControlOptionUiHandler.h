@@ -14,83 +14,81 @@ extern GameClockLcd lcd2;
 extern GameClock gameClock;
 
 extern GameUiHandler gameUiHandler;
-extern UiHandler *currentUiHandler;
+extern UiHandler    *currentUiHandler;
 
 const char selectTimeControlOptionUiHandlerBack[] PROGMEM = "^ back ^";
 
 class SelectTimeControlOptionUiHandler : public UiHandler {
-  
-  UiHandler *previusHandler;
-  TimeControlUi *timeControlUi;
-  int16_t currentOption;
-  
+	UiHandler *previousHandler;
+	TimeControlUi *timeControlUi;
+	int16_t currentOption;
+
 public:
 
-  SelectTimeControlOptionUiHandler() {
-    timeControlUi = NULL;
-    currentOption = 0;
-  }
-  
-  virtual ~SelectTimeControlOptionUiHandler() {
-  }
+	SelectTimeControlOptionUiHandler() {
+		timeControlUi = NULL;
+		currentOption = 0;
+	}
 
-  virtual void tick(Clock *clock) {
-    buttonGestures.tick( clock );
+	virtual ~SelectTimeControlOptionUiHandler() {}
 
-    int travel = buttonGestures.getNavigationTravel();
-    bool buttonPushed = buttonGestures.wasPushButtonPushed();
-    
-    if( buttonPushed ) {
-      if( isBackOption() ) {
-        currentUiHandler = previusHandler;
-      } else {
-        gameClock.setup( clock, timeControlUi->create( currentOption ) );
-        gameUiHandler.setTimeControlUi( timeControlUi );
-        currentUiHandler = &gameUiHandler;
-      }
-      beep();
-      
-      return;
-    }
+	virtual void tick(Clock *clock) {
+		buttonGestures.tick(clock);
 
-    if (travel != 0) {
-      int optionCount = (timeControlUi->getNumberOfOptions() + 1);
-      currentOption = (currentOption + travel) % optionCount;
-      if (currentOption < 0) {
-        currentOption = optionCount + currentOption;
-      }
-    }
-  }
-  
-  virtual void render(Clock *clock){
-    lcd2.beginRender( clock );
-    
-    if( isBackOption() ) {
-      lcd2.printBottomCenter( selectTimeControlOptionUiHandlerBack );
-    } else {
-      lcd2.printWholeScreen( timeControlUi->getOption( currentOption ) );
-    }
-    
-    lcd2.endRender();
-  }
-  
-  void setTimeControlUi(TimeControlUi *timeControlUi) {
-    if( this->timeControlUi != timeControlUi ) {
-      currentOption = 0;
-    }
-    this->timeControlUi = timeControlUi;
-  }
+		int  travel       = buttonGestures.getNavigationTravel();
+		bool buttonPushed = buttonGestures.wasPushButtonPushed();
 
-  void wire(UiHandler *previusHandler) {
-    this->previusHandler = previusHandler;
-  }
-  
+		if (buttonPushed) {
+			if (isBackOption()) {
+				currentUiHandler = previousHandler;
+			} else {
+				gameClock.setup(clock, timeControlUi->create(currentOption));
+				gameUiHandler.setTimeControlUi(timeControlUi);
+				currentUiHandler = &gameUiHandler;
+			}
+			beep();
+
+			return;
+		}
+
+		if (travel != 0) {
+			int optionCount = (timeControlUi->getNumberOfOptions() + 1);
+			currentOption = (currentOption + travel) % optionCount;
+
+			if (currentOption < 0) {
+				currentOption = optionCount + currentOption;
+			}
+		}
+	}
+
+	virtual void render(Clock *clock) {
+		lcd2.beginRender(clock);
+
+		if (isBackOption()) {
+			lcd2.printBottomCenter(selectTimeControlOptionUiHandlerBack);
+		} else {
+			lcd2.printWholeScreen(timeControlUi->getOption(currentOption));
+		}
+
+		lcd2.endRender();
+	}
+
+	void setTimeControlUi(TimeControlUi *timeControlUi) {
+		if (this->timeControlUi != timeControlUi) {
+			currentOption = 0;
+		}
+		this->timeControlUi = timeControlUi;
+	}
+
+	void wire(UiHandler *previousHandler) {
+		this->previousHandler = previousHandler;
+	}
+
 private:
 
-  bool isBackOption() {
-    return currentOption == timeControlUi->getNumberOfOptions();
-  }
-
+	bool isBackOption() {
+		return currentOption == timeControlUi->getNumberOfOptions();
+	}
 };
 
-#endif
+#endif // ifndef __SelectTimeControlOptionUiHandler_h__

@@ -7,14 +7,11 @@
 #include "Clock.h"
 
 class ArduinoClock : public Clock {
-  
 public:
-  
-  virtual uint32_t currentTime() {
-    return millis();
-  }
-  
+
+	virtual uint32_t currentTime() {
+		return millis();
+	}
 };
 
-#endif
-
+#endif // ifndef __ArduinoClock_h__

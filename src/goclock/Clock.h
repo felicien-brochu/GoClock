@@ -5,12 +5,9 @@
 #include "base.h"
 
 class Clock {
-
 public:
 
-  virtual uint32_t currentTime() = 0;
-  
+	virtual uint32_t currentTime() = 0;
 };
 
-#endif
-
+#endif // ifndef __Clock_h__
