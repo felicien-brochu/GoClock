@@ -54,7 +54,6 @@ public:
 		if (buttonPushed) {
 			if (subValueIndex + 1 >= getSubValueCount()) {
 				onCustomValueConfirmed(clock);
-				beep();
 			} else {
 				subValueIndex++;
 			}

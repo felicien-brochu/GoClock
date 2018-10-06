@@ -236,7 +236,7 @@ private:
 		}
 		int32_t hours   = time / (1000L * 60L * 60L);
 		int32_t minutes = (time % (1000L * 60L * 60L)) / (1000L * 60L);
-		int32_t seconds = ((time % (1000L * 60L * 60L)) % (1000L * 60L)) / 1000L;
+		int32_t seconds = ((time % (1000L * 60L * 60L)) % (1000L * 60L)) / 1000L + 1;
 
 		// Serial.print( "Time: " );Serial.print( time );Serial.print( " hours: " );Serial.print( hours );Serial.print( " minutes: " );Serial.print( minutes );Serial.print( " seconds: " );Serial.println( seconds );
 		if (hours > 0) {

@@ -106,8 +106,8 @@ public:
 		return new HourGlassTimeControl(customValues[0] * 1000L);
 	}
 
-	virtual void renderGame(GameClock *gameClock, GameClockLcd *lcd) {
-		TimeControlUi::renderGame(gameClock, lcd);
+	virtual bool renderGame(GameClock *gameClock, GameClockLcd *lcd) {
+		bool beep = TimeControlUi::renderGame(gameClock, lcd);
 
 		HourGlassTimeControl *hourGlass = (HourGlassTimeControl *)gameClock->getTimeControl();
 
@@ -116,6 +116,8 @@ public:
 			                        (hourGlass->wasTimeTransferredFromPlayerOne() ? '>' : '<'),
 			                        (hourGlass->getLastTransferedTime() / 1000L));
 		}
+
+		return beep;
 	}
 };
 

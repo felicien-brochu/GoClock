@@ -111,11 +111,13 @@ public:
 		return new BronsteinDelayTimeControl(customValues[0] * 1000L, customValues[1] * 1000L);
 	}
 
-	virtual void renderGame(GameClock *gameClock, GameClockLcd *lcd) {
-		TimeControlUi::renderGame(gameClock, lcd);
+	virtual bool renderGame(GameClock *gameClock, GameClockLcd *lcd) {
+		bool beep = TimeControlUi::renderGame(gameClock, lcd);
 
 		BronsteinDelayTimeControl *bronsteinDelay = (BronsteinDelayTimeControl *)gameClock->getTimeControl();
+
 		lcd->sPrintBottomCenter(bronsteinDelayFormat, bronsteinDelay->getDelay() / 1000L);
+		return beep;
 	}
 };
 

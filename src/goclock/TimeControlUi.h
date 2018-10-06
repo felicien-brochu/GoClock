@@ -35,13 +35,15 @@ public:
 	virtual uint8_t           getCustomSetupLength()             = 0;
 	virtual const CustomValue getCustomSetupValue(uint8_t index) = 0;
 
-	virtual void              renderGame(GameClock *gameClock, GameClockLcd *lcd) {
+	virtual bool              renderGame(GameClock *gameClock, GameClockLcd *lcd) {
 		TimeControl *timeControl = gameClock->getTimeControl();
 
 		lcd->printTopLeftTime(timeControl->getPlayerOneTime(gameClock->getClock()),
 		                      gameClock->isPlayerOnePlaying());
 		lcd->printTopRightTime(timeControl->getPlayerTwoTime(gameClock->getClock()),
 		                       gameClock->isPlayerTwoPlaying());
+
+		return false;
 	}
 };
 

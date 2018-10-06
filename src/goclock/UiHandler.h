@@ -16,7 +16,7 @@ public:
 protected:
 
 	virtual void beep() {
-		buzzer.playTone(880, 40);
+		buzzer.playTone(180, 40);
 	}
 };
 

@@ -49,7 +49,11 @@ public:
 
 	virtual void render(Clock *clock) {
 		lcd2.beginRender(clock);
-		timeControlUi->renderGame(&gameClock, &lcd2);
+		bool doBeep = timeControlUi->renderGame(&gameClock, &lcd2);
+
+		if (doBeep) {
+			beep();
+		}
 
 		if (gameClock.isOver()) {
 			if (gameClock.playerOneWon()) {

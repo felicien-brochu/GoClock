@@ -149,9 +149,8 @@ public:
 		return new ByoYomiTimeControl(byoYomiSetup);
 	}
 
-	virtual void renderGame(GameClock *gameClock, GameClockLcd *lcd) {
-		TimeControlUi::renderGame(gameClock, lcd);
-
+	virtual bool renderGame(GameClock *gameClock, GameClockLcd *lcd) {
+		bool beep                   = TimeControlUi::renderGame(gameClock, lcd);
 		ByoYomiTimeControl *byoYomi = (ByoYomiTimeControl *)gameClock->getTimeControl();
 
 		if (byoYomi->isPlayerOneInNormalTime()) {
@@ -165,6 +164,20 @@ public:
 		} else {
 			lcd->sPrintBottomRight(byoYomiUiFormat, byoYomi->getPlayerTwoRemainingByoYomiPeriods());
 		}
+
+		// Beep on 5 last seconds
+		if (!gameClock->isPaused()) {
+			uint32_t time = 100000;
+
+			if (gameClock->isPlayerOnePlaying()) {
+				time = byoYomi->getPlayerOneTime(gameClock->getClock());
+			} else if (gameClock->isPlayerTwoPlaying()) {
+				time = byoYomi->getPlayerTwoTime(gameClock->getClock());
+			}
+			beep |= (time <= 5020) && ((time % 1000 <= 20) || (time % 1000 >= 980));
+		}
+
+		return beep;
 	}
 };
 
