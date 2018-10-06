@@ -30,14 +30,14 @@ const CustomValue canadianByoYomiCustomSetup[] PROGMEM = {
 	{
 		canadianByoYomiValueLabel1,
 		CUSTOM_VALUE_TIME,
-		0L,
+		1L,
 		CUSTOM_VALUE_TIME_MAX,
 		1L * 60L
 	},
 	{
 		canadianByoYomiValueLabel2,
 		CUSTOM_VALUE_TIME,
-		0L,
+		1L,
 		CUSTOM_VALUE_TIME_MAX,
 		15L * 60L
 	},

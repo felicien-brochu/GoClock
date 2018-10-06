@@ -45,6 +45,7 @@ public:
 	}
 
 	virtual void tick(Clock *clock) {
+		gameClock->tick();
 		buttonGestures.tick(clock);
 		bool buttonPushed = buttonGestures.wasPushButtonPushed();
 		int  travel       = buttonGestures.getNavigationTravel();
@@ -83,8 +84,6 @@ public:
 				onMenuClick();
 			}
 		} else if ((menuIndex == MENU_ITEM_GAME) && started && !gameClock->isPaused() && !gameClock->isOver()) { // < Normal play
-			gameClock->tick();
-
 			if (buttonPushed) {
 				lcd2.setBlinking(true);
 				gameClock->pause();

@@ -25,14 +25,14 @@ const CustomValue byoYomiCustomSetup[] PROGMEM = {
 	{
 		byoYomiValueLabel1,
 		CUSTOM_VALUE_TIME,
-		0L,
+		1L,
 		CUSTOM_VALUE_TIME_MAX,
 		10L * 60L
 	},
 	{
 		byoYomiValueLabel2,
 		CUSTOM_VALUE_MIN_SEC,
-		0L,
+		1L,
 		CUSTOM_VALUE_MIN_SEC_MAX,
 		30L
 	},
