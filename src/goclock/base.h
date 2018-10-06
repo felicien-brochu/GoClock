@@ -8,4 +8,7 @@
 // for malloc and free
 #include <stdlib.h>
 
+// declare reset function @ address 0
+void (*resetFunc)(void) = 0;
+
 #endif // ifndef __base_h__

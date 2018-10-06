@@ -3,6 +3,7 @@
 #define __CustomSetupUiHandler_h__
 
 #include "UiHandler.h"
+#include "SelectTimeControlUiHandler.h"
 #include "GameUiHandler.h"
 #include "GameButtonGestures.h"
 
@@ -14,10 +15,11 @@
 
 extern GameButtonGestures buttonGestures;
 extern GameClockLcd lcd2;
-extern GameClock    gameClock;
+extern GameClock   *gameClock;
 
 extern GameUiHandler gameUiHandler;
 extern UiHandler    *currentUiHandler;
+extern UiHandler    *startingHandler;
 
 class CustomSetupUiHandler : public UiHandler {
 	TimeControlUi *timeControlUi;
@@ -42,6 +44,10 @@ public:
 
 	virtual void tick(Clock *clock) {
 		buttonGestures.tick(clock);
+
+		if (buttonGestures.wasPushButtonLongPushed()) {
+			currentUiHandler = startingHandler;
+		}
 
 		int  travel       = buttonGestures.getNavigationTravel();
 		bool buttonPushed = buttonGestures.wasPushButtonPushed();
@@ -96,7 +102,8 @@ public:
 private:
 
 	void startGame(Clock *clock) {
-		gameClock.setup(clock, timeControlUi->createCustom(values));
+		gameClock = new GameClock();
+		gameClock->setup(clock, timeControlUi->createCustom(values));
 		gameUiHandler.setTimeControlUi(timeControlUi);
 		currentUiHandler = &gameUiHandler;
 	}

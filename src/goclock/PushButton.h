@@ -16,7 +16,7 @@ class PushButton {
 
 public:
 
-	PushButton(uint8_t pin) : filter(3), longFilter(3, 2000) {
+	PushButton(uint8_t pin) : filter(20), longFilter(20, 2000) {
 		this->pin = pin;
 		wasDown   = false;
 		waitUp    = false;
@@ -34,7 +34,7 @@ public:
 			wasDown = true;
 		}
 
-		longFilter.tick(clock, filter.isOn());
+		longFilter.tick(clock, !filter.isOn());
 	}
 
 	bool isUp() {
@@ -61,7 +61,7 @@ public:
 	}
 
 	bool wasLongPushed() {
-		if (wasDown && longFilter.isOn() && !waitUp) {
+		if (longFilter.isOn() && !waitUp) {
 			waitUp = true;
 			return true;
 		}

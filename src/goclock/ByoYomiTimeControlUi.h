@@ -174,7 +174,7 @@ public:
 			} else if (gameClock->isPlayerTwoPlaying()) {
 				time = byoYomi->getPlayerTwoTime(gameClock->getClock());
 			}
-			beep |= (time <= 5020) && ((time % 1000 <= 20) || (time % 1000 >= 980));
+			beep |= (time <= 6020) && ((time % 1000 <= 20) || (time % 1000 >= 980));
 		}
 
 		return beep;

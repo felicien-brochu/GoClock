@@ -13,6 +13,7 @@
 
 #include "SelectTimeControlUiHandler.h"
 #include "SelectTimeControlOptionUiHandler.h"
+#include "CustomSetupUiHandler.h"
 #include "GameUiHandler.h"
 
 #include "ByoYomiTimeControlUi.h"
@@ -31,21 +32,22 @@ Buzzer buzzer(12);
 
 // GameClock...
 ArduinoClock clock;
-GameClock    gameClock;
+GameClock   *gameClock;
 
 // TimeControls:
 TimeControlUi *timeControls[] = {
 	new ByoYomiTimeControlUi(),
 	new CanadianByoYomiTimeControlUi(),
-	new SuddenDeathTimeControlUi(),
-	new HourGlassTimeControlUi(),
 	new FischerDelayTimeControlUi(),
 	new BronsteinDelayTimeControlUi(),
+	new SuddenDeathTimeControlUi(),
+	new HourGlassTimeControlUi(),
 	NULL
 };
 
 // User Interface ...
 UiHandler *currentUiHandler;
+UiHandler *startingHandler;
 SelectTimeControlUiHandler selectTimeControlUiHandler;
 SelectTimeControlOptionUiHandler selectTimeControlOptionUiHandler;
 CustomSetupUiHandler customSetupUiHandler;
@@ -64,7 +66,8 @@ void setup() {
 	rotaryEncoder.init();
 
 	selectTimeControlOptionUiHandler.wire(&selectTimeControlUiHandler);
-	currentUiHandler = &selectTimeControlUiHandler;
+	startingHandler  = &selectTimeControlUiHandler;
+	currentUiHandler = startingHandler;
 }
 
 void loop() {

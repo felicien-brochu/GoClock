@@ -19,7 +19,7 @@ public:
 	SignalFilter(uint32_t threshold1, uint32_t threshold2) {
 		this->threshold1 = threshold1;
 		this->threshold2 = threshold2;
-		state            = false;
+		state            = true;
 		filtering        = false;
 	}
 
@@ -41,7 +41,7 @@ public:
 	}
 
 	bool isOn() {
-		return state;
+		return !state;
 	}
 
 private:
@@ -60,7 +60,7 @@ private:
 	}
 
 	bool thresholdPassed(Clock *clock) {
-		uint32_t threshold = state ? threshold1 : threshold2;
+		uint32_t threshold = state ? threshold2 : threshold1;
 
 		return (clock->currentTime() - changeTime) > threshold;
 	}

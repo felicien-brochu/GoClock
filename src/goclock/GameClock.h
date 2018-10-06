@@ -81,8 +81,6 @@ public:
 		}
 		currentPlayer->beginPause(clock);
 		paused = true;
-
-		// beep();
 	}
 
 	void resume() {
@@ -91,8 +89,6 @@ public:
 		}
 		currentPlayer->endPause(clock);
 		paused = false;
-
-		// beep();
 	}
 
 	Clock* getClock() {

@@ -12,11 +12,12 @@
 extern GameButtonGestures buttonGestures;
 extern GameClockLcd lcd2;
 
-extern GameClock gameClock;
+extern GameClock *gameClock;
 
 extern GameUiHandler gameUiHandler;
 extern CustomSetupUiHandler customSetupUiHandler;
 extern UiHandler *currentUiHandler;
+extern UiHandler *startingHandler;
 
 const char selectTimeControlOptionUiHandlerBack[] PROGMEM = "^ BACK ^";
 const char selectTimeControlOptionUiHandlerCustom[] PROGMEM = "- Custom time -";
@@ -38,6 +39,10 @@ public:
 	virtual void tick(Clock *clock) {
 		buttonGestures.tick(clock);
 
+		if (buttonGestures.wasPushButtonLongPushed()) {
+			currentUiHandler = startingHandler;
+		}
+
 		int  travel       = buttonGestures.getNavigationTravel();
 		bool buttonPushed = buttonGestures.wasPushButtonPushed();
 
@@ -47,7 +52,8 @@ public:
 			} else if (isCustomOption()) {
 				startCustomSetup();
 			} else {
-				gameClock.setup(clock, timeControlUi->create(currentOption));
+				gameClock = new GameClock();
+				gameClock->setup(clock, timeControlUi->create(currentOption));
 				gameUiHandler.setTimeControlUi(timeControlUi);
 				currentUiHandler = &gameUiHandler;
 			}
