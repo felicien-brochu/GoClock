@@ -54,7 +54,7 @@ public:
 			} else {
 				gameClock = new GameClock();
 				gameClock->setup(clock, timeControlUi->create(currentOption));
-				gameUiHandler.setTimeControlUi(timeControlUi);
+				gameUiHandler.setup(timeControlUi);
 				currentUiHandler = &gameUiHandler;
 			}
 			beep();
@@ -87,7 +87,7 @@ public:
 		lcd2.endRender();
 	}
 
-	void setTimeControlUi(TimeControlUi *timeControlUi) {
+	void setup(TimeControlUi *timeControlUi) {
 		if (this->timeControlUi != timeControlUi) {
 			currentOption = 0;
 		}

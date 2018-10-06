@@ -42,7 +42,7 @@ public:
 		}
 
 		if (buttonPushed) {
-			selectTimeControlOptionUiHandler.setTimeControlUi(timeControls[currentTimeControlUi]);
+			selectTimeControlOptionUiHandler.setup(timeControls[currentTimeControlUi]);
 			currentUiHandler = &selectTimeControlOptionUiHandler;
 			beep();
 		}

@@ -129,8 +129,6 @@ private:
 		currentPlayer = &playerOne;
 		currentPlayer->mark(clock);
 		timeControl->onPlayerOneBeganToPlay();
-
-		// beep();
 	}
 
 	void onPlayerOnePlayed() {

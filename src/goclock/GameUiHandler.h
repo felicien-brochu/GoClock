@@ -21,34 +21,51 @@ const char gameUiHandlerPlayerTwoWinnerMessage[] PROGMEM = " WINNER";
 
 class GameUiHandler : public UiHandler {
 	TimeControlUi *timeControlUi;
+	bool started;
+	int8_t toggleButtonState;
 
 public:
 
+	GameUiHandler() {
+		started           = false;
+		toggleButtonState = -1;
+	}
+
 	virtual void tick(Clock *clock) {
 		buttonGestures.tick(clock);
-		gameClock->tick();
 
-		if (buttonGestures.wasPushButtonLongPushed()) {
-			goBackToStartingHandler();
-		}
+		if (started) {
+			gameClock->tick();
 
-		if (buttonGestures.wasPushButtonPushed()) {
-			if (gameClock->isOver()) {
+			if (buttonGestures.wasPushButtonLongPushed()) {
 				goBackToStartingHandler();
-			} else if (gameClock->isPaused()) {
-				lcd2.setBlinking(false);
-				gameClock->resume();
-			} else {
-				lcd2.setBlinking(true);
-				gameClock->pause();
+				return;
 			}
-			return;
-		}
 
-		if (buttonGestures.isToggleButtonDisabled()) {
-			gameClock->selectPlayerTwo();
-		} else if (buttonGestures.isToggleButtonEnabled()) {
-			gameClock->selectPlayerOne();
+			if (buttonGestures.wasPushButtonPushed()) {
+				if (gameClock->isOver()) {
+					goBackToStartingHandler();
+				} else if (gameClock->isPaused()) {
+					lcd2.setBlinking(false);
+					gameClock->resume();
+				} else {
+					lcd2.setBlinking(true);
+					gameClock->pause();
+				}
+			}
+
+			if (buttonGestures.isToggleButtonDisabled()) {
+				gameClock->selectPlayerOne();
+			} else if (buttonGestures.isToggleButtonEnabled()) {
+				gameClock->selectPlayerTwo();
+			}
+		} else {
+			if ((toggleButtonState >= 0) &&
+			    (toggleButtonState != buttonGestures.isToggleButtonDisabled())) {
+				started = true;
+			} else {
+				toggleButtonState = buttonGestures.isToggleButtonDisabled();
+			}
 		}
 	}
 
@@ -70,8 +87,10 @@ public:
 		lcd2.endRender();
 	}
 
-	void setTimeControlUi(TimeControlUi *timeControlUi) {
+	void setup(TimeControlUi *timeControlUi) {
 		this->timeControlUi = timeControlUi;
+		started             = false;
+		toggleButtonState   = -1;
 	}
 
 private:
