@@ -29,6 +29,18 @@ const char *const suddenDeathOptions[] PROGMEM = {
 	suddenDeathOption6, suddenDeathOption7
 };
 
+const char suddenDeathValueLabel1[] PROGMEM = "Time";
+
+const CustomValue suddenDeathCustomSetup[] PROGMEM = {
+	{
+		suddenDeathValueLabel1,
+		CUSTOM_VALUE_TIME,
+		0L,
+		CUSTOM_VALUE_TIME_MAX,
+		10L * 60L
+	}
+};
+
 class SuddenDeathTimeControlUi : public TimeControlUi {
 public:
 
@@ -99,6 +111,18 @@ public:
 			break;
 		}
 		return new SuddenDeathTimeControl(time);
+	}
+
+	virtual uint8_t getCustomSetupLength() {
+		return 1;
+	}
+
+	virtual const CustomValue getCustomSetupValue(uint8_t index) {
+		return PROGMEM_getAnything(&suddenDeathCustomSetup[index]);
+	}
+
+	virtual TimeControl* createCustom(long customValues[]) {
+		return new SuddenDeathTimeControl(customValues[0] * 1000L);
 	}
 };
 

@@ -48,6 +48,7 @@ TimeControlUi *timeControls[] = {
 UiHandler *currentUiHandler;
 SelectTimeControlUiHandler selectTimeControlUiHandler;
 SelectTimeControlOptionUiHandler selectTimeControlOptionUiHandler;
+CustomSetupUiHandler customSetupUiHandler;
 GameUiHandler gameUiHandler;
 GameButtonGestures buttonGestures;
 

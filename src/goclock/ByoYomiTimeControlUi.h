@@ -1,4 +1,3 @@
-
 #ifndef __ByoYomiTimeControlUi_h__
 #define __ByoYomiTimeControlUi_h__
 
@@ -16,6 +15,34 @@ const char byoYomiOption3[] PROGMEM = "  1m + (5 x 20s)"
 
 const char *const byoYomiOptions[] PROGMEM = {
 	byoYomiOption1, byoYomiOption2, byoYomiOption3
+};
+
+const char byoYomiValueLabel1[] PROGMEM = "Main time";
+const char byoYomiValueLabel2[] PROGMEM = "Byo yomi time";
+const char byoYomiValueLabel3[] PROGMEM = "Number of period";
+
+const CustomValue byoYomiCustomSetup[] PROGMEM = {
+	{
+		byoYomiValueLabel1,
+		CUSTOM_VALUE_TIME,
+		0L,
+		CUSTOM_VALUE_TIME_MAX,
+		10L * 60L
+	},
+	{
+		byoYomiValueLabel2,
+		CUSTOM_VALUE_MIN_SEC,
+		0L,
+		CUSTOM_VALUE_MIN_SEC_MAX,
+		30L
+	},
+	{
+		byoYomiValueLabel3,
+		CUSTOM_VALUE_INT,
+		0L,
+		BYO_YOMI_SETUP_MAX_PERIODS,
+		5L
+	}
 };
 
 const char byoYomiUiNormalTime[] PROGMEM = "normal";
@@ -99,6 +126,29 @@ public:
 		return new ByoYomiTimeControl(byoYomiSetup);
 	}
 
+	virtual uint8_t getCustomSetupLength() {
+		return 3;
+	}
+
+	virtual const CustomValue getCustomSetupValue(uint8_t index) {
+		return PROGMEM_getAnything(&byoYomiCustomSetup[index]);
+	}
+
+	virtual TimeControl* createCustom(long customValues[]) {
+		uint32_t byoYomiTime;
+		ByoYomiSetup byoYomiSetup;
+
+		byoYomiSetup.time            = customValues[0] * 1000L;
+		byoYomiTime                  = customValues[1] * 1000L;
+		byoYomiSetup.numberOfPeriods = (int)customValues[2];
+
+		for (int i = 0; i < byoYomiSetup.numberOfPeriods; i++) {
+			byoYomiSetup.periods[i].numberOfPlays = 1;
+			byoYomiSetup.periods[i].time          = byoYomiTime;
+		}
+		return new ByoYomiTimeControl(byoYomiSetup);
+	}
+
 	virtual void renderGame(GameClock *gameClock, GameClockLcd *lcd) {
 		TimeControlUi::renderGame(gameClock, lcd);
 
@@ -106,13 +156,13 @@ public:
 
 		if (byoYomi->isPlayerOneInNormalTime()) {
 			lcd->printBottomLeft(byoYomiUiNormalTime);
-		} else  {
+		} else {
 			lcd->sPrintBottomLeft(byoYomiUiFormat, byoYomi->getPlayerOneRemainingByoYomiPeriods());
 		}
 
 		if (byoYomi->isPlayerTwoInNormalTime()) {
 			lcd->printBottomRight(byoYomiUiNormalTime);
-		} else  {
+		} else {
 			lcd->sPrintBottomRight(byoYomiUiFormat, byoYomi->getPlayerTwoRemainingByoYomiPeriods());
 		}
 	}

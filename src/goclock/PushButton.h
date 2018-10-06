@@ -28,7 +28,6 @@ public:
 	}
 
 	void tick(Clock *clock) {
-		Serial.println(digitalRead(pin));
 		filter.tick(clock, digitalRead(pin));
 
 		if (!wasDown && isDown()) {

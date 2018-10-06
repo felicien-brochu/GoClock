@@ -21,6 +21,26 @@ const char *const bronsteinDelayOptions[] PROGMEM = {
 	bronsteinDelayOption1, bronsteinDelayOption2, bronsteinDelayOption3, bronsteinDelayOption4
 };
 
+const char bronsteinDelayValueLabel1[] PROGMEM = "Time";
+const char bronsteinDelayValueLabel2[] PROGMEM = "Delay";
+
+const CustomValue bronsteinDelayCustomSetup[] PROGMEM = {
+	{
+		bronsteinDelayValueLabel1,
+		CUSTOM_VALUE_TIME,
+		0L,
+		CUSTOM_VALUE_TIME_MAX,
+		5L * 60L
+	},
+	{
+		bronsteinDelayValueLabel2,
+		CUSTOM_VALUE_INT,
+		0L,
+		60L,
+		12L
+	}
+};
+
 const char bronsteinDelayFormat[] PROGMEM = "delay %d sec";
 
 class BronsteinDelayTimeControlUi : public TimeControlUi {
@@ -77,6 +97,18 @@ public:
 			break;
 		}
 		return new BronsteinDelayTimeControl(time, delay);
+	}
+
+	virtual uint8_t getCustomSetupLength() {
+		return 2;
+	}
+
+	virtual const CustomValue getCustomSetupValue(uint8_t index) {
+		return PROGMEM_getAnything(&bronsteinDelayCustomSetup[index]);
+	}
+
+	virtual TimeControl* createCustom(long customValues[]) {
+		return new BronsteinDelayTimeControl(customValues[0] * 1000L, customValues[1] * 1000L);
 	}
 
 	virtual void renderGame(GameClock *gameClock, GameClockLcd *lcd) {

@@ -22,6 +22,34 @@ const char *const canadianByoYomiOptions[] PROGMEM = {
 	canadianByoYomiOption1, canadianByoYomiOption2, canadianByoYomiOption3, canadianByoYomiOption4
 };
 
+const char canadianByoYomiValueLabel1[] PROGMEM = "Main time";
+const char canadianByoYomiValueLabel2[] PROGMEM = "Period time";
+const char canadianByoYomiValueLabel3[] PROGMEM = "Number of moves";
+
+const CustomValue canadianByoYomiCustomSetup[] PROGMEM = {
+	{
+		canadianByoYomiValueLabel1,
+		CUSTOM_VALUE_TIME,
+		0L,
+		CUSTOM_VALUE_TIME_MAX,
+		1L * 60L
+	},
+	{
+		canadianByoYomiValueLabel2,
+		CUSTOM_VALUE_TIME,
+		0L,
+		CUSTOM_VALUE_TIME_MAX,
+		15L * 60L
+	},
+	{
+		canadianByoYomiValueLabel3,
+		CUSTOM_VALUE_INT,
+		1L,
+		CUSTOM_VALUE_INT_MAX,
+		25L
+	}
+};
+
 const char canadianByoYomiUiNormalTime[] PROGMEM = "normal";
 const char canadianByoYomiUiFormat[] PROGMEM = "%d";
 
@@ -92,6 +120,29 @@ public:
 		return new ByoYomiTimeControl(byoYomiSetup);
 	}
 
+	virtual uint8_t getCustomSetupLength() {
+		return 3;
+	}
+
+	virtual const CustomValue getCustomSetupValue(uint8_t index) {
+		return PROGMEM_getAnything(&canadianByoYomiCustomSetup[index]);
+	}
+
+	virtual TimeControl* createCustom(long customValues[]) {
+		uint32_t byoYomiTime;
+		ByoYomiSetup byoYomiSetup;
+
+		byoYomiSetup.time            = customValues[0] * 1000L;
+		byoYomiTime                  = customValues[1] * 1000L;
+		byoYomiSetup.numberOfPeriods = (int)1;
+
+		for (int i = 0; i < byoYomiSetup.numberOfPeriods; i++) {
+			byoYomiSetup.periods[i].numberOfPlays = customValues[2];
+			byoYomiSetup.periods[i].time          = byoYomiTime;
+		}
+		return new ByoYomiTimeControl(byoYomiSetup);
+	}
+
 	virtual void renderGame(GameClock *gameClock, GameClockLcd *lcd) {
 		TimeControlUi::renderGame(gameClock, lcd);
 
@@ -99,13 +150,13 @@ public:
 
 		if (canadian->isPlayerOneInNormalTime()) {
 			lcd->printBottomLeft(canadianByoYomiUiNormalTime);
-		} else  {
+		} else {
 			lcd->sPrintBottomLeft(canadianByoYomiUiFormat, canadian->getPlayerOneRemainingNumberOfPlays());
 		}
 
 		if (canadian->isPlayerTwoInNormalTime()) {
 			lcd->printBottomRight(canadianByoYomiUiNormalTime);
-		} else  {
+		} else {
 			lcd->sPrintBottomRight(canadianByoYomiUiFormat, canadian->getPlayerTwoRemainingNumberOfPlays());
 		}
 	}

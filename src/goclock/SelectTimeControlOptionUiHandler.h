@@ -6,6 +6,7 @@
 #include "GameClock.h"
 #include "GameClockLcd.h"
 #include "GameUiHandler.h"
+#include "CustomSetupUiHandler.h"
 #include "GameButtonGestures.h"
 
 extern GameButtonGestures buttonGestures;
@@ -14,9 +15,11 @@ extern GameClockLcd lcd2;
 extern GameClock gameClock;
 
 extern GameUiHandler gameUiHandler;
-extern UiHandler    *currentUiHandler;
+extern CustomSetupUiHandler customSetupUiHandler;
+extern UiHandler *currentUiHandler;
 
-const char selectTimeControlOptionUiHandlerBack[] PROGMEM = "^ back ^";
+const char selectTimeControlOptionUiHandlerBack[] PROGMEM = "^ BACK ^";
+const char selectTimeControlOptionUiHandlerCustom[] PROGMEM = "- Custom time -";
 
 class SelectTimeControlOptionUiHandler : public UiHandler {
 	UiHandler *previousHandler;
@@ -41,18 +44,21 @@ public:
 		if (buttonPushed) {
 			if (isBackOption()) {
 				currentUiHandler = previousHandler;
+			} else if (isCustomOption()) {
+				startCustomSetup();
 			} else {
 				gameClock.setup(clock, timeControlUi->create(currentOption));
 				gameUiHandler.setTimeControlUi(timeControlUi);
 				currentUiHandler = &gameUiHandler;
 			}
 			beep();
+			currentOption = 0;
 
 			return;
 		}
 
 		if (travel != 0) {
-			int optionCount = (timeControlUi->getNumberOfOptions() + 1);
+			int optionCount = (timeControlUi->getNumberOfOptions() + 2);
 			currentOption = (currentOption + travel) % optionCount;
 
 			if (currentOption < 0) {
@@ -66,6 +72,8 @@ public:
 
 		if (isBackOption()) {
 			lcd2.printBottomCenter(selectTimeControlOptionUiHandlerBack);
+		} else if (isCustomOption()) {
+			lcd2.printTopCenter(selectTimeControlOptionUiHandlerCustom);
 		} else {
 			lcd2.printWholeScreen(timeControlUi->getOption(currentOption));
 		}
@@ -86,7 +94,16 @@ public:
 
 private:
 
+	void startCustomSetup() {
+		customSetupUiHandler.init(timeControlUi);
+		currentUiHandler = &customSetupUiHandler;
+	}
+
 	bool isBackOption() {
+		return currentOption == timeControlUi->getNumberOfOptions() + 1;
+	}
+
+	bool isCustomOption() {
 		return currentOption == timeControlUi->getNumberOfOptions();
 	}
 };

@@ -5,6 +5,7 @@
 #include <LiquidCrystal.h>
 
 #define GAME_CLOCK_LCD_BUFFER_SIZE 17
+#define BLINK_TOGGLE_TIME 500
 
 class GameClockLcd {
 	enum Alignment { Left, Center, Right };
@@ -85,6 +86,71 @@ public:
 		formatTime(time, &topBuffer[11], blink);
 	}
 
+	void printBottomCustomValueTime(long value, uint8_t subValueIndex) {
+		uint8_t hour, min, sec;
+
+		sec  = value % 60L;
+		min  = (value / 60L) % 60L;
+		hour = (value / (60L * 60L)) % 100;
+
+		bottomBuffer[4] = (char)('0' + (hour / 10));
+		bottomBuffer[5] = (char)('0' + (hour % 10));
+		bottomBuffer[6] = ':';
+
+		if ((subValueIndex != 0) || blinkToggle) {
+			bottomBuffer[7] = (char)('0' + (min / 10));
+			bottomBuffer[8] = (char)('0' + (min % 10));
+		}
+		bottomBuffer[9] = ':';
+
+		if ((subValueIndex != 1) || blinkToggle) {
+			bottomBuffer[10] = (char)('0' + (sec / 10));
+			bottomBuffer[11] = (char)('0' + (sec % 10));
+		}
+	}
+
+	void printBottomCustomValueMinSec(long value, uint8_t subValueIndex) {
+		uint8_t min, sec;
+
+		sec = value % 60L;
+		min = (value / 60L) % 60L;
+
+		if ((subValueIndex != 0) || blinkToggle) {
+			bottomBuffer[5] = (char)('0' + (min / 10));
+			bottomBuffer[6] = (char)('0' + (min % 10));
+		}
+		bottomBuffer[7] = ':';
+
+		if ((subValueIndex != 1) || blinkToggle) {
+			bottomBuffer[8] = (char)('0' + (sec / 10));
+			bottomBuffer[9] = (char)('0' + (sec % 10));
+		}
+	}
+
+	void printBottomCustomValueInt(long value) {
+		if (blinkToggle) {
+			uint8_t exponent  = 0;
+			long    tempValue = value;
+
+			do {
+				tempValue = tempValue / 10;
+				exponent++;
+			} while (tempValue > 0);
+
+			if (exponent > 16) {
+				exponent = 16;
+			}
+
+			uint8_t i = 15 - ((16 - exponent) / 2);
+
+			do {
+				bottomBuffer[i] = (char)('0' + (value % 10));
+				value           = value / 10;
+				i--;
+			} while (value > 0);
+		}
+	}
+
 	void sPrintBottomLeft(const char *format, ...) {
 		va_list body;
 
@@ -111,6 +177,13 @@ public:
 
 	void setBlinking(bool blinking) {
 		blink = blinking;
+	}
+
+	void resetBlinking(Clock *clock) {
+		uint32_t currentTime = clock->currentTime();
+
+		blinkToggleTime = currentTime + BLINK_TOGGLE_TIME;
+		blinkToggle     = true;
 	}
 
 	void endRender() {
@@ -211,7 +284,7 @@ private:
 		uint32_t currentTime = clock->currentTime();
 
 		if (currentTime > blinkToggleTime) {
-			blinkToggleTime = currentTime + 250;
+			blinkToggleTime = currentTime + BLINK_TOGGLE_TIME;
 			blinkToggle     = !blinkToggle;
 		}
 	}
