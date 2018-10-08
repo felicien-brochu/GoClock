@@ -52,9 +52,9 @@ public:
 			} else if (isCustomOption()) {
 				startCustomSetup();
 			} else {
-				gameClock = new GameClock();
-				gameClock->setup(clock, timeControlUi->create(currentOption));
-				gameUiHandler.setup(timeControlUi);
+				gameUiHandler.setup(timeControlUi->getTimeControlType(),
+				                    timeControlUi->getDefaultOptionValues(currentOption),
+				                    clock);
 				currentUiHandler = &gameUiHandler;
 			}
 			beep();

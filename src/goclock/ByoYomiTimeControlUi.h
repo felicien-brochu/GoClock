@@ -55,6 +55,10 @@ public:
 		return byoYomiName;
 	}
 
+	virtual uint8_t getTimeControlType() {
+		return BYOYOMI_TYPE;
+	}
+
 	virtual int16_t getNumberOfOptions() {
 		return 3;
 	}
@@ -73,57 +77,30 @@ public:
 		return byoYomiOptions[0];
 	}
 
-	virtual TimeControl* create(int16_t option) {
-		uint32_t byoYomiTime;
-		ByoYomiSetup byoYomiSetup;
+	virtual long* getDefaultOptionValues(int16_t option) {
+		static long values[3];
 
 		switch (option) {
 		case 0:
-			byoYomiSetup.time                     = 1000L * 60L * 25L;
-			byoYomiSetup.numberOfPeriods          = 5;
-			byoYomiTime                           = 30L * 1000L;
-			byoYomiSetup.periods[0].numberOfPlays = 1;
-			byoYomiSetup.periods[0].time          = byoYomiTime;
-			byoYomiSetup.periods[1].numberOfPlays = 1;
-			byoYomiSetup.periods[1].time          = byoYomiTime;
-			byoYomiSetup.periods[2].numberOfPlays = 1;
-			byoYomiSetup.periods[2].time          = byoYomiTime;
-			byoYomiSetup.periods[3].numberOfPlays = 1;
-			byoYomiSetup.periods[3].time          = byoYomiTime;
-			byoYomiSetup.periods[4].numberOfPlays = 1;
-			byoYomiSetup.periods[4].time          = byoYomiTime;
+			values[0] = 60L * 25L;
+			values[1] = 30L;
+			values[2] = 5;
 			break;
 
 		case 1:
-			byoYomiSetup.time                     = 1000L * 60L * 10L;
-			byoYomiSetup.numberOfPeriods          = 5;
-			byoYomiTime                           = 30L * 1000L;
-			byoYomiSetup.periods[0].numberOfPlays = 1;
-			byoYomiSetup.periods[0].time          = byoYomiTime;
-			byoYomiSetup.periods[1].numberOfPlays = 1;
-			byoYomiSetup.periods[1].time          = byoYomiTime;
-			byoYomiSetup.periods[2].numberOfPlays = 1;
-			byoYomiSetup.periods[2].time          = byoYomiTime;
-			byoYomiSetup.periods[3].numberOfPlays = 1;
-			byoYomiSetup.periods[3].time          = byoYomiTime;
-			byoYomiSetup.periods[4].numberOfPlays = 1;
-			byoYomiSetup.periods[4].time          = byoYomiTime;
+			values[0] = 60L * 10L;
+			values[1] = 30L;
+			values[2] = 5;
 			break;
 
 		case 2:
-			byoYomiSetup.time                     = 1000L * 60L * 1L;
-			byoYomiSetup.numberOfPeriods          = 3;
-			byoYomiTime                           = 20L * 1000L;
-			byoYomiSetup.periods[0].numberOfPlays = 1;
-			byoYomiSetup.periods[0].time          = byoYomiTime;
-			byoYomiSetup.periods[1].numberOfPlays = 1;
-			byoYomiSetup.periods[1].time          = byoYomiTime;
-			byoYomiSetup.periods[2].numberOfPlays = 1;
-			byoYomiSetup.periods[2].time          = byoYomiTime;
+			values[0] = 60L * 1L;
+			values[1] = 20L;
+			values[2] = 3;
 			break;
 		}
 
-		return new ByoYomiTimeControl(byoYomiSetup);
+		return values;
 	}
 
 	virtual uint8_t getCustomSetupLength() {
@@ -134,13 +111,13 @@ public:
 		return PROGMEM_getAnything(&byoYomiCustomSetup[index]);
 	}
 
-	virtual TimeControl* createCustom(long customValues[]) {
+	virtual TimeControl* create(long values[]) {
 		uint32_t byoYomiTime;
 		ByoYomiSetup byoYomiSetup;
 
-		byoYomiSetup.time            = customValues[0] * 1000L;
-		byoYomiTime                  = customValues[1] * 1000L;
-		byoYomiSetup.numberOfPeriods = (int)customValues[2];
+		byoYomiSetup.time            = values[0] * 1000L;
+		byoYomiTime                  = values[1] * 1000L;
+		byoYomiSetup.numberOfPeriods = (int)values[2];
 
 		for (int i = 0; i < byoYomiSetup.numberOfPeriods; i++) {
 			byoYomiSetup.periods[i].numberOfPlays = 1;

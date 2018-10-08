@@ -43,6 +43,10 @@ public:
 		return hourGlassName;
 	}
 
+	virtual uint8_t getTimeControlType() {
+		return HOURGLASS_TYPE;
+	}
+
 	virtual int16_t getNumberOfOptions() {
 		return 5;
 	}
@@ -67,31 +71,31 @@ public:
 		return hourGlassOptions[0];
 	}
 
-	virtual TimeControl* create(int16_t option) {
-		uint32_t time = 0;
+	virtual long* getDefaultOptionValues(int16_t option) {
+		static long values[1];
 
 		switch (option) {
 		case 0:
-			time = 1000L * 30L;
+			values[0] = 30L;
 			break;
 
 		case 1:
-			time = 1000L * 60L * 1L;
+			values[0] = 60L * 1L;
 			break;
 
 		case 2:
-			time = 1000L * 60L * 2L;
+			values[0] = 60L * 2L;
 			break;
 
 		case 3:
-			time = 1000L * 60L * 5L;
+			values[0] = 60L * 5L;
 			break;
 
 		case 4:
-			time = 1000L * 60L * 10L;
+			values[0] = 60L * 10L;
 			break;
 		}
-		return new HourGlassTimeControl(time);
+		return values;
 	}
 
 	virtual uint8_t getCustomSetupLength() {
@@ -102,8 +106,8 @@ public:
 		return PROGMEM_getAnything(&hourGlassCustomSetup[index]);
 	}
 
-	virtual TimeControl* createCustom(long customValues[]) {
-		return new HourGlassTimeControl(customValues[0] * 1000L);
+	virtual TimeControl* create(long values[]) {
+		return new HourGlassTimeControl(values[0] * 1000L);
 	}
 
 	virtual bool renderGame(GameClock *gameClock, GameClockLcd *lcd) {

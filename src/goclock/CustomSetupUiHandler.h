@@ -102,9 +102,7 @@ public:
 private:
 
 	void startGame(Clock *clock) {
-		gameClock = new GameClock();
-		gameClock->setup(clock, timeControlUi->createCustom(values));
-		gameUiHandler.setup(timeControlUi);
+		gameUiHandler.setup(timeControlUi->getTimeControlType(), values, clock);
 		currentUiHandler = &gameUiHandler;
 	}
 

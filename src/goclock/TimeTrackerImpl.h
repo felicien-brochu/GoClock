@@ -24,8 +24,6 @@ public:
 		pauseMarkTime    = 0;
 	}
 
-	virtual ~TimeTrackerImpl() {}
-
 	// <TimeTracker>
 
 	virtual void setTime(int32_t time) {

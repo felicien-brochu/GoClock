@@ -8,6 +8,13 @@
 
 #define UI_BUFFER_SIZE 32
 
+#define BRONSTEINDELAY_TYPE  0
+#define BYOYOMI_TYPE         1
+#define CANADIANBYOYOMI_TYPE 2
+#define FISCHERDELAY_TYPE    3
+#define HOURGLASS_TYPE       4
+#define SUDDENDEATH_TYPE     5
+
 #define CUSTOM_VALUE_TIME    0
 #define CUSTOM_VALUE_MIN_SEC 1
 #define CUSTOM_VALUE_INT     2
@@ -27,13 +34,14 @@ struct CustomValue {
 class TimeControlUi {
 public:
 
-	virtual const char      * getName()                          = 0;
-	virtual int16_t           getNumberOfOptions()               = 0;
-	virtual const char      * getOption(int16_t option)          = 0;
-	virtual TimeControl     * create(int16_t option)             = 0;
-	virtual TimeControl     * createCustom(long customValues[])  = 0;
-	virtual uint8_t           getCustomSetupLength()             = 0;
-	virtual const CustomValue getCustomSetupValue(uint8_t index) = 0;
+	virtual const char      * getName()                              = 0;
+	virtual uint8_t           getTimeControlType()                   = 0;
+	virtual int16_t           getNumberOfOptions()                   = 0;
+	virtual const char      * getOption(int16_t option)              = 0;
+	virtual long            * getDefaultOptionValues(int16_t option) = 0;
+	virtual TimeControl     * create(long values[])                  = 0;
+	virtual uint8_t           getCustomSetupLength()                 = 0;
+	virtual const CustomValue getCustomSetupValue(uint8_t index)     = 0;
 
 	virtual bool              renderGame(GameClock *gameClock, GameClockLcd *lcd) {
 		TimeControl *timeControl = gameClock->getTimeControl();

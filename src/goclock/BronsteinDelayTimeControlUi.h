@@ -50,6 +50,10 @@ public:
 		return bronsteinDelayName;
 	}
 
+	virtual uint8_t getTimeControlType() {
+		return BRONSTEINDELAY_TYPE;
+	}
+
 	virtual int16_t getNumberOfOptions() {
 		return 4;
 	}
@@ -71,32 +75,31 @@ public:
 		return bronsteinDelayOptions[0];
 	}
 
-	virtual TimeControl* create(int16_t option) {
-		uint32_t time  = 0;
-		uint32_t delay = 0;
+	virtual long* getDefaultOptionValues(int16_t option) {
+		static long values[2];
 
 		switch (option) {
 		case 0:
-			time  = 1000L * 60L * 2L;
-			delay = 1000L * 12L;
+			values[0] = 60L * 2L;
+			values[1] = 12L;
 			break;
 
 		case 1:
-			time  = 1000L * 60L * 3L;
-			delay = 1000L * 12L;
+			values[0] = 60L * 3L;
+			values[1] = 12L;
 			break;
 
 		case 2:
-			time  = 1000L * 60L * 5L;
-			delay = 1000L * 1L;
+			values[0] = 60L * 5L;
+			values[1] = 1L;
 			break;
 
 		case 3:
-			time  = 1000L * 60L * 10L;
-			delay = 1000L * 10L;
+			values[0] = 60L * 10L;
+			values[1] = 10L;
 			break;
 		}
-		return new BronsteinDelayTimeControl(time, delay);
+		return values;
 	}
 
 	virtual uint8_t getCustomSetupLength() {
@@ -107,8 +110,8 @@ public:
 		return PROGMEM_getAnything(&bronsteinDelayCustomSetup[index]);
 	}
 
-	virtual TimeControl* createCustom(long customValues[]) {
-		return new BronsteinDelayTimeControl(customValues[0] * 1000L, customValues[1] * 1000L);
+	virtual TimeControl* create(long values[]) {
+		return new BronsteinDelayTimeControl(values[0] * 1000L, values[1] * 1000L);
 	}
 
 	virtual bool renderGame(GameClock *gameClock, GameClockLcd *lcd) {

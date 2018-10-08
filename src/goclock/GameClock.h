@@ -27,8 +27,6 @@ public:
 		overNotified    = false;
 	}
 
-	virtual ~GameClock() {}
-
 	void setup(Clock *clock, TimeControl *timeControl) {
 		this->clock       = clock;
 		this->timeControl = timeControl;
