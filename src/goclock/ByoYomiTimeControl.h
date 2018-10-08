@@ -79,7 +79,7 @@ public:
 
 private:
 
-	ByoYomiTimeControl() : TimeControlBase(0), setup(), playerOneState(NULL), playerTwoState(NULL) {}
+	ByoYomiTimeControl() : TimeControlBase(0), setup(), playerOneState(nullptr), playerTwoState(nullptr) {}
 
 	void onPlayerPlayed(TimeTracker *player, PlayerState *playerState) {
 		if (!isPlayerOnByoYomi(playerState)) {

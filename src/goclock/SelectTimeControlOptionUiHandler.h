@@ -12,8 +12,6 @@
 extern GameButtonGestures buttonGestures;
 extern GameClockLcd lcd2;
 
-extern GameClock *gameClock;
-
 extern GameUiHandler gameUiHandler;
 extern CustomSetupUiHandler customSetupUiHandler;
 extern UiHandler *currentUiHandler;
@@ -30,7 +28,7 @@ class SelectTimeControlOptionUiHandler : public UiHandler {
 public:
 
 	SelectTimeControlOptionUiHandler() {
-		timeControlUi = NULL;
+		timeControlUi = nullptr;
 		currentOption = 0;
 	}
 
@@ -41,6 +39,7 @@ public:
 
 		if (buttonGestures.wasPushButtonLongPushed()) {
 			currentUiHandler = startingHandler;
+			return;
 		}
 
 		int  travel       = buttonGestures.getNavigationTravel();
@@ -101,7 +100,7 @@ public:
 private:
 
 	void startCustomSetup() {
-		customSetupUiHandler.init(timeControlUi);
+		customSetupUiHandler.setup(timeControlUi);
 		currentUiHandler = &customSetupUiHandler;
 	}
 

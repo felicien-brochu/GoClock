@@ -12,7 +12,7 @@ protected:
 	bool playerOneWon, playerTwoWon;
 
 	TimeControlBase(uint32_t playersInitialTime) {
-		playerOne                = playerTwo = NULL;
+		playerOne                = playerTwo = nullptr;
 		this->playersInitialTime = playersInitialTime;
 		playerOneWon             = playerTwoWon = false;
 	}
@@ -31,7 +31,7 @@ public:
 
 	virtual void onPlayerOneBeganToPlay() {}
 
-	virtual void onPlayerOnePlayed() {}
+	virtual void onPlayerOnePlayed()      {}
 
 	virtual void onPlayerOneTimeExpired() {
 		playerTwoWon = true;
@@ -39,7 +39,7 @@ public:
 
 	virtual void onPlayerTwoBeganToPlay() {}
 
-	virtual void onPlayerTwoPlayed() {}
+	virtual void onPlayerTwoPlayed()      {}
 
 	virtual void onPlayerTwoTimeExpired() {
 		playerOneWon = true;

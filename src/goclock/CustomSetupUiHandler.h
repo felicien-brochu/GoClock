@@ -9,8 +9,6 @@
 
 #include "TimeControlUi.h"
 
-// #include "CustomValueUiHandler.h"
-
 #define MAX_CUSTOM_VALUES 5
 
 extern GameButtonGestures buttonGestures;
@@ -34,7 +32,7 @@ public:
 
 	CustomSetupUiHandler() {}
 
-	void init(TimeControlUi *timeControlUi) {
+	void setup(TimeControlUi *timeControlUi) {
 		this->timeControlUi = timeControlUi;
 		valueIndex          = 0;
 		nextCustomValueHandler();
@@ -47,6 +45,7 @@ public:
 
 		if (buttonGestures.wasPushButtonLongPushed()) {
 			currentUiHandler = startingHandler;
+			return;
 		}
 
 		int  travel       = buttonGestures.getNavigationTravel();

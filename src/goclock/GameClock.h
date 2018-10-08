@@ -21,8 +21,8 @@ class GameClock {
 public:
 
 	GameClock() {
-		clock           = NULL;
-		playerThatLoose = currentPlayer = NULL;
+		clock           = nullptr;
+		playerThatLoose = currentPlayer = nullptr;
 		paused          = false;
 		overNotified    = false;
 	}
@@ -74,7 +74,7 @@ public:
 	}
 
 	void pause() {
-		if ((currentPlayer == NULL) || isPaused() || isOver()) {
+		if ((currentPlayer == nullptr) || isPaused() || isOver()) {
 			return;
 		}
 		currentPlayer->beginPause(clock);
@@ -102,7 +102,7 @@ public:
 	}
 
 	bool isOver() {
-		return timeControl != NULL && timeControl->isOver();
+		return timeControl != nullptr && timeControl->isOver();
 	}
 
 	bool isPlayerOnePlaying() {
@@ -179,7 +179,7 @@ private:
 		buzzer.playTone(3520, 2000);
 		overNotified    = true;
 		playerThatLoose = currentPlayer;
-		currentPlayer   = NULL;
+		currentPlayer   = nullptr;
 	}
 
 	void beep() {

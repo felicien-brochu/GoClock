@@ -6,6 +6,7 @@
 #include "GameClockLcd.h"
 #include "UiHandler.h"
 #include "TimeControlUi.h"
+#include "AddTimeOptionUiHandler.h"
 #include "BronsteinDelayTimeControlUi.h"
 #include "ByoYomiTimeControlUi.h"
 #include "CanadianByoYomiTimeControlUi.h"
@@ -26,6 +27,7 @@ extern GameClock *gameClock;
 extern GameButtonGestures buttonGestures;
 extern GameClockLcd lcd2;
 
+extern AddTimeOptionUiHandler addTimeOptionUiHandler;
 extern UiHandler *currentUiHandler;
 extern UiHandler *startingHandler;
 
@@ -235,7 +237,11 @@ private:
 		}
 	}
 
-	void onAddTimeClick() {}
+	void onAddTimeClick() {
+		addTimeOptionUiHandler.setup(timeControlUi);
+		addTimeOptionUiHandler.wire(this);
+		currentUiHandler = &addTimeOptionUiHandler;
+	}
 
 	void onRestartClick(Clock *clock) {
 		this->setup(timeControlType, setupValues, clock);

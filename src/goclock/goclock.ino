@@ -15,6 +15,7 @@
 #include "SelectTimeControlOptionUiHandler.h"
 #include "CustomSetupUiHandler.h"
 #include "GameUiHandler.h"
+#include "AddTimeOptionUiHandler.h"
 
 #include "ByoYomiTimeControlUi.h"
 #include "CanadianByoYomiTimeControlUi.h"
@@ -42,7 +43,7 @@ TimeControlUi *timeControls[] = {
 	new BronsteinDelayTimeControlUi(),
 	new SuddenDeathTimeControlUi(),
 	new HourGlassTimeControlUi(),
-	NULL
+	nullptr
 };
 
 // User Interface ...
@@ -52,7 +53,8 @@ SelectTimeControlUiHandler selectTimeControlUiHandler;
 SelectTimeControlOptionUiHandler selectTimeControlOptionUiHandler;
 CustomSetupUiHandler customSetupUiHandler;
 GameUiHandler gameUiHandler;
-GameButtonGestures buttonGestures;
+AddTimeOptionUiHandler addTimeOptionUiHandler;
+GameButtonGestures     buttonGestures;
 
 void setup() {
 	// *

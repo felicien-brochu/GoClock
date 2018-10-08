@@ -62,7 +62,7 @@ private:
 	int getNumberOfOptions() {
 		int optionCount = 0;
 
-		while (timeControls[optionCount] != NULL) {
+		while (timeControls[optionCount] != nullptr) {
 			optionCount++;
 		}
 		return optionCount;
