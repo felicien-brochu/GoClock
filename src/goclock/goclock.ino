@@ -54,7 +54,8 @@ SelectTimeControlOptionUiHandler selectTimeControlOptionUiHandler;
 CustomSetupUiHandler customSetupUiHandler;
 GameUiHandler gameUiHandler;
 AddTimeOptionUiHandler addTimeOptionUiHandler;
-GameButtonGestures     buttonGestures;
+AddTimeUiHandler addTimeUiHandler;
+GameButtonGestures buttonGestures;
 
 void setup() {
 	// *

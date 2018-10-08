@@ -45,6 +45,23 @@ const CustomValue byoYomiCustomSetup[] PROGMEM = {
 	}
 };
 
+const CustomValue byoYomiAddTimeSetup[] PROGMEM = {
+	{
+		byoYomiValueLabel1,
+		CUSTOM_VALUE_TIME,
+		0L,
+		CUSTOM_VALUE_TIME_MAX,
+		0L
+	},
+	{
+		byoYomiValueLabel3,
+		CUSTOM_VALUE_INT,
+		0L,
+		BYO_YOMI_SETUP_MAX_PERIODS,
+		0L
+	}
+};
+
 const char byoYomiUiNormalTime[] PROGMEM = "normal";
 const char byoYomiUiFormat[] PROGMEM = "%d";
 
@@ -124,6 +141,14 @@ public:
 			byoYomiSetup.periods[i].time          = byoYomiTime;
 		}
 		return new ByoYomiTimeControl(byoYomiSetup);
+	}
+
+	virtual uint8_t getAddTimeLength() {
+		return 2;
+	}
+
+	virtual const CustomValue getAddTimeValue(uint8_t index) {
+		return PROGMEM_getAnything(&byoYomiAddTimeSetup[index]);
 	}
 
 	virtual bool renderGame(GameClock *gameClock, GameClockLcd *lcd) {

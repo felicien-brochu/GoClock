@@ -135,6 +135,14 @@ public:
 		return new ByoYomiTimeControl(byoYomiSetup);
 	}
 
+	virtual uint8_t getAddTimeLength() {
+		return 2;
+	}
+
+	virtual const CustomValue getAddTimeValue(uint8_t index) {
+		return PROGMEM_getAnything(&byoYomiAddTimeSetup[index]);
+	}
+
 	virtual bool renderGame(GameClock *gameClock, GameClockLcd *lcd) {
 		bool beep = TimeControlUi::renderGame(gameClock, lcd);
 

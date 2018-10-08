@@ -6,12 +6,14 @@
 #include "GameClock.h"
 #include "GameClockLcd.h"
 #include "GameButtonGestures.h"
+#include "AddTimeUiHandler.h"
 
 extern GameButtonGestures buttonGestures;
 extern GameClockLcd lcd2;
 
 extern UiHandler *currentUiHandler;
 extern UiHandler *startingHandler;
+extern AddTimeUiHandler addTimeUiHandler;
 
 #define ADD_TIME_OPTION_COUNT 4
 
@@ -100,8 +102,9 @@ public:
 private:
 
 	void startAddingTime() {
-		// customSetupUiHandler.setup(timeControlUi);
-		// currentUiHandler = &customSetupUiHandler;
+		addTimeUiHandler.setup(timeControlUi, currentOption);
+		addTimeUiHandler.wire(previousHandler);
+		currentUiHandler = &addTimeUiHandler;
 	}
 
 	bool isBackOption() {

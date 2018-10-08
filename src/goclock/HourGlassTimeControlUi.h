@@ -34,6 +34,16 @@ const CustomValue hourGlassCustomSetup[] PROGMEM = {
 	}
 };
 
+const CustomValue hourGlassAddTimeSetup[] PROGMEM = {
+	{
+		hourGlassValueLabel1,
+		CUSTOM_VALUE_TIME,
+		0L,
+		CUSTOM_VALUE_TIME_MAX,
+		0L
+	}
+};
+
 const char HOURGLASS_FORMAT[] PROGMEM = "%c %d sec";
 
 class HourGlassTimeControlUi : public TimeControlUi {
@@ -108,6 +118,14 @@ public:
 
 	virtual TimeControl* create(long values[]) {
 		return new HourGlassTimeControl(values[0] * 1000L);
+	}
+
+	virtual uint8_t getAddTimeLength() {
+		return 1;
+	}
+
+	virtual const CustomValue getAddTimeValue(uint8_t index) {
+		return PROGMEM_getAnything(&hourGlassAddTimeSetup[index]);
 	}
 
 	virtual bool renderGame(GameClock *gameClock, GameClockLcd *lcd) {

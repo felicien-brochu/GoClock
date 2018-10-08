@@ -42,6 +42,8 @@ public:
 	virtual TimeControl     * create(long values[])                  = 0;
 	virtual uint8_t           getCustomSetupLength()                 = 0;
 	virtual const CustomValue getCustomSetupValue(uint8_t index)     = 0;
+	virtual uint8_t           getAddTimeLength()                     = 0;
+	virtual const CustomValue getAddTimeValue(uint8_t index)         = 0;
 
 	virtual bool              renderGame(GameClock *gameClock, GameClockLcd *lcd) {
 		TimeControl *timeControl = gameClock->getTimeControl();

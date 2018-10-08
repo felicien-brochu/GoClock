@@ -23,7 +23,9 @@ public:
 		addBonus(playerTwo);
 	}
 
-	uint32_t getBonus() {
+	virtual void addTime(long values[], uint8_t addTimeType, Clock *clock) {}
+
+	uint32_t     getBonus() {
 		return bonus;
 	}
 

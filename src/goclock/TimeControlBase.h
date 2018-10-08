@@ -45,6 +45,25 @@ public:
 		playerOneWon = true;
 	}
 
+	virtual void addTime(long values[], uint8_t addTimeType, Clock *clock) {
+		uint32_t time = values[0] * 1000L;
+
+		switch (addTimeType) {
+		case ADD_TIME_OPTION_LEFT:
+			playerOne->addTime(time);
+			break;
+
+		case ADD_TIME_OPTION_RIGHT:
+			playerTwo->addTime(time);
+			break;
+
+		case ADD_TIME_OPTION_BOTH:
+			playerOne->addTime(time);
+			playerTwo->addTime(time);
+			break;
+		}
+	}
+
 	virtual int32_t getPlayerOneTime(Clock *clock) {
 		return playerOne->getTime(clock);
 	}

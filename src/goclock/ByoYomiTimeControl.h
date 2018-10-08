@@ -51,6 +51,8 @@ public:
 		onPlayerTimeExpired(playerTwo, &playerTwoState);
 	}
 
+	virtual void addTime(long values[], uint8_t addTimeType, Clock *clock) {}
+
 	// </TimeControl>
 
 	bool isPlayerOneInNormalTime() {
