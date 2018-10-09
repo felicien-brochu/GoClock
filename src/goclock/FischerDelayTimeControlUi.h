@@ -47,16 +47,6 @@ const CustomValue fischerDelayCustomSetup[] PROGMEM = {
 	}
 };
 
-const CustomValue fischerDelayAddTimeSetup[] PROGMEM = {
-	{
-		fischerDelayValueLabel1,
-		CUSTOM_VALUE_TIME,
-		0L,
-		CUSTOM_VALUE_TIME_MAX,
-		0L
-	}
-};
-
 const char fischerDelayFormat[] PROGMEM = "+%d sec";
 
 class FischerDelayTimeControlUi : public TimeControlUi {
@@ -144,14 +134,6 @@ public:
 
 	virtual TimeControl* create(long values[]) {
 		return new FischerDelayTimeControl(values[0] * 1000L, values[1] * 1000L);
-	}
-
-	virtual uint8_t getAddTimeLength() {
-		return 1;
-	}
-
-	virtual const CustomValue getAddTimeValue(uint8_t index) {
-		return PROGMEM_getAnything(&fischerDelayAddTimeSetup[index]);
 	}
 
 	virtual bool renderGame(GameClock *gameClock, GameClockLcd *lcd) {

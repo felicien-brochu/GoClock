@@ -175,12 +175,8 @@ public:
 		va_end(body);
 	}
 
-	void setBlinking(bool blinking, Clock *clock) {
+	void setBlinking(bool blinking) {
 		blink = blinking;
-
-		if (blinking) {
-			resetBlinking(clock);
-		}
 	}
 
 	void resetBlinking(Clock *clock) {

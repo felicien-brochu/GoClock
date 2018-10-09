@@ -67,10 +67,9 @@ public:
 
 		if (!started && (menuIndex == MENU_ITEM_GAME)) { // < Initialization
 			if (toggleButtonState == -1) {
-				lcd2.setBlinking(true, clock);
+				lcd2.resetBlinking(clock);
 				toggleButtonState = buttonGestures.isToggleButtonDisabled();
 			} else if (toggleButtonState != buttonGestures.isToggleButtonDisabled()) {
-				lcd2.setBlinking(false, clock);
 				started = true;
 			}
 		}
@@ -82,12 +81,6 @@ public:
 				if (menuIndex < 0) {
 					menuIndex = MENU_ITEM_COUNT + menuIndex;
 				}
-
-				if ((menuIndex == MENU_ITEM_GAME) && (gameClock->isPaused() || !started)) {
-					lcd2.setBlinking(true, clock);
-				} else {
-					lcd2.setBlinking(false, clock);
-				}
 			}
 
 			if (buttonPushed) {
@@ -95,7 +88,7 @@ public:
 			}
 		} else if ((menuIndex == MENU_ITEM_GAME) && started && !gameClock->isPaused() && !gameClock->isOver()) { // < Normal play
 			if (buttonPushed) {
-				lcd2.setBlinking(true, clock);
+				lcd2.resetBlinking(clock);
 				gameClock->pause();
 			}
 
@@ -134,6 +127,8 @@ public:
 	void renderGame(Clock *clock) {
 		bool doBeep = timeControlUi->renderGame(gameClock, &lcd2);
 
+		lcd2.setBlinking(gameClock->isPaused() || !started);
+
 		if (doBeep) {
 			beep();
 		}
@@ -148,14 +143,17 @@ public:
 	}
 
 	void renderExitItem(Clock *clock) {
+		lcd2.setBlinking(false);
 		lcd2.printTopCenter(gameUiHandlerExitItem);
 	}
 
 	void renderAddTimeItem(Clock *clock) {
+		lcd2.setBlinking(false);
 		lcd2.printTopCenter(gameUiHandlerAddTimeItem);
 	}
 
 	void renderRestartItem(Clock *clock) {
+		lcd2.setBlinking(false);
 		lcd2.printTopCenter(gameUiHandlerRestartItem);
 	}
 
@@ -204,7 +202,7 @@ private:
 
 	void goBackToStartingHandler(Clock *clock) {
 		currentUiHandler = startingHandler;
-		lcd2.setBlinking(false, clock);
+		lcd2.setBlinking(false);
 		delete gameClock;
 	}
 
@@ -232,7 +230,6 @@ private:
 		if (gameClock->isOver()) {
 			goBackToStartingHandler(clock);
 		} else if (gameClock->isPaused()) {
-			lcd2.setBlinking(false, clock);
 			gameClock->resume();
 		}
 	}
@@ -241,6 +238,7 @@ private:
 		addTimeOptionUiHandler.setup(timeControlUi);
 		addTimeOptionUiHandler.wire(this);
 		currentUiHandler = &addTimeOptionUiHandler;
+		menuIndex        = MENU_ITEM_GAME;
 	}
 
 	void onRestartClick(Clock *clock) {

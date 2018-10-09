@@ -18,7 +18,9 @@ struct ByoYomiPeriod {
 
 struct ByoYomiSetup {
 	uint32_t      time;
+	uint32_t      periodTime;
 	uint16_t      numberOfPeriods;
+	uint16_t      numberOfPlays;
 	ByoYomiPeriod periods[BYO_YOMI_SETUP_MAX_PERIODS];
 };
 
@@ -51,7 +53,27 @@ public:
 		onPlayerTimeExpired(playerTwo, &playerTwoState);
 	}
 
-	virtual void addTime(long values[], uint8_t addTimeType, Clock *clock) {}
+	virtual void addTime(int32_t time, uint8_t addTimeType, Clock *clock) {
+		time = time * 1000L;
+
+		if ((addTimeType == ADD_TIME_OPTION_LEFT) || (addTimeType == ADD_TIME_OPTION_BOTH)) {
+			addPlayerTime(time, playerOne, &playerOneState, clock);
+		}
+
+		if ((addTimeType == ADD_TIME_OPTION_RIGHT) || (addTimeType == ADD_TIME_OPTION_BOTH)) {
+			addPlayerTime(time, playerTwo, &playerTwoState, clock);
+		}
+	}
+
+	void addPlayerTime(int32_t time, TimeTracker *player, PlayerState *playerState, Clock *clock) {
+		if (playerState->isOnByoYomi()) {
+			int32_t currentTime = player->getTime(clock);
+			int32_t timeLeft    = playerState->addTime(time, currentTime);
+			player->addTime(timeLeft - currentTime);
+		} else {
+			player->addTime(time);
+		}
+	}
 
 	// </TimeControl>
 
@@ -87,7 +109,7 @@ private:
 		if (!isPlayerOnByoYomi(playerState)) {
 			return;
 		}
-		playerIncrementNumberOfPlayes(playerState);
+		playerIncrementNumberOfPlays(playerState);
 
 		if (hasPlayerReachedTargetNumberOfPlays(playerState)) {
 			playerRenewByoYomiPeriod(player, playerState);
@@ -98,7 +120,7 @@ private:
 		return playerState->isOnByoYomi();
 	}
 
-	void playerIncrementNumberOfPlayes(PlayerState *playerState) {
+	void playerIncrementNumberOfPlays(PlayerState *playerState) {
 		playerState->incrementNumberOfPlays();
 	}
 
@@ -146,8 +168,8 @@ private:
 
 	class PlayerState {
 		bool onByoYomi;
-		uint16_t period;
-		uint16_t numberOfPlays;
+		int period;
+		int numberOfPlays;
 		ByoYomiSetup *setup;
 
 public:
@@ -157,6 +179,32 @@ public:
 			onByoYomi     = false;
 			period        = 0;
 			numberOfPlays = 0;
+		}
+
+		int32_t addTime(int32_t addTime, int32_t currentTime) {
+			int32_t timeLeft   = addTime;
+			int     periodPlus = 0;
+
+			periodPlus = ((currentTime + addTime) / setup->periodTime);
+
+			if (periodPlus > period) {
+				periodPlus = period;
+			}
+
+			period = period - periodPlus;
+
+
+			if (addTime + currentTime > (periodPlus + 1) * setup->periodTime) {
+				timeLeft      = addTime + currentTime - (periodPlus + 1) * setup->periodTime;
+				onByoYomi     = false;
+				numberOfPlays = 0;
+			} else {
+				timeLeft      = (addTime + currentTime) % setup->periodTime;
+				numberOfPlays = (setup->periodTime - timeLeft) * setup->numberOfPlays /
+				                setup->periodTime;
+			}
+
+			return timeLeft;
 		}
 
 		bool isOnByoYomi() {

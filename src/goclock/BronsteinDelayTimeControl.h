@@ -23,9 +23,7 @@ public:
 		onPlayerPlayed(playerTwo);
 	}
 
-	virtual void addTime(long values[], uint8_t addTimeType, Clock *clock) {}
-
-	uint32_t     getDelay() {
+	uint32_t getDelay() {
 		return delay;
 	}
 

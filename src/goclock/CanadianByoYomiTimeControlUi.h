@@ -126,21 +126,15 @@ public:
 
 		byoYomiSetup.time            = values[0] * 1000L;
 		byoYomiTime                  = values[1] * 1000L;
-		byoYomiSetup.numberOfPeriods = (int)1;
+		byoYomiSetup.periodTime      = byoYomiTime;
+		byoYomiSetup.numberOfPeriods = 1;
+		byoYomiSetup.numberOfPlays   = values[2];
 
 		for (int i = 0; i < byoYomiSetup.numberOfPeriods; i++) {
 			byoYomiSetup.periods[i].numberOfPlays = values[2];
 			byoYomiSetup.periods[i].time          = byoYomiTime;
 		}
 		return new ByoYomiTimeControl(byoYomiSetup);
-	}
-
-	virtual uint8_t getAddTimeLength() {
-		return 2;
-	}
-
-	virtual const CustomValue getAddTimeValue(uint8_t index) {
-		return PROGMEM_getAnything(&byoYomiAddTimeSetup[index]);
 	}
 
 	virtual bool renderGame(GameClock *gameClock, GameClockLcd *lcd) {

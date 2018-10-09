@@ -18,7 +18,7 @@ public:
 	virtual void    onPlayerTwoPlayed()      = 0;
 	virtual void    onPlayerTwoTimeExpired() = 0;
 
-	virtual void    addTime(long    values[],
+	virtual void    addTime(int32_t time,
 	                        uint8_t addTimeType,
 	                        Clock  *clock)         = 0;
 	virtual int32_t getPlayerOneTime(Clock *clock) = 0;

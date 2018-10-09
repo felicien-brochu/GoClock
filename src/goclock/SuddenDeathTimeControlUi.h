@@ -41,16 +41,6 @@ const CustomValue suddenDeathCustomSetup[] PROGMEM = {
 	}
 };
 
-const CustomValue suddenDeathAddTimeSetup[] PROGMEM = {
-	{
-		suddenDeathValueLabel1,
-		CUSTOM_VALUE_TIME,
-		0L,
-		CUSTOM_VALUE_TIME_MAX,
-		0L
-	}
-};
-
 class SuddenDeathTimeControlUi : public TimeControlUi {
 public:
 
@@ -137,14 +127,6 @@ public:
 
 	virtual TimeControl* create(long values[]) {
 		return new SuddenDeathTimeControl(values[0] * 1000L);
-	}
-
-	virtual uint8_t getAddTimeLength() {
-		return 1;
-	}
-
-	virtual const CustomValue getAddTimeValue(uint8_t index) {
-		return PROGMEM_getAnything(&suddenDeathAddTimeSetup[index]);
 	}
 };
 

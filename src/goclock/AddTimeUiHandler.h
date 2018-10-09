@@ -18,6 +18,8 @@ extern GameClock   *gameClock;
 extern UiHandler *currentUiHandler;
 extern UiHandler *startingHandler;
 
+const char addTimeUiHandlerAddTimeLabel[] PROGMEM  = "Add time";
+
 class AddTimeUiHandler : public UiHandler {
 	TimeControlUi *timeControlUi;
 	UiHandler *previousHandler;
@@ -31,7 +33,15 @@ class AddTimeUiHandler : public UiHandler {
 
 public:
 
-	AddTimeUiHandler() {}
+	AddTimeUiHandler() {
+		currentCustomValue = {
+			addTimeUiHandlerAddTimeLabel,
+			CUSTOM_VALUE_MIN_SEC,
+			0L,
+			CUSTOM_VALUE_TIME_MAX,
+			0L
+		};
+	}
 
 	void setup(TimeControlUi *timeControlUi, uint8_t addTimeType) {
 		this->timeControlUi = timeControlUi;
@@ -93,7 +103,7 @@ public:
 		values[valueIndex] = currentValue;
 		valueIndex++;
 
-		if (valueIndex >= this->timeControlUi->getAddTimeLength()) {
+		if (valueIndex >= 1) {
 			addTime(clock);
 		} else {
 			nextCustomValueHandler();
@@ -109,14 +119,13 @@ private:
 	void addTime(Clock *clock) {
 		TimeControl *timeControl = gameClock->getTimeControl();
 
-		timeControl->addTime(values, addTimeType, clock);
+		timeControl->addTime(values[0], addTimeType, clock);
 		currentUiHandler = this->previousHandler;
 	}
 
 	void nextCustomValueHandler() {
-		currentCustomValue = this->timeControlUi->getAddTimeValue(valueIndex);
-		currentValue       = currentCustomValue.def;
-		subValueIndex      = 0;
+		currentValue  = currentCustomValue.def;
+		subValueIndex = 0;
 	}
 
 	uint8_t getSubValueCount() {

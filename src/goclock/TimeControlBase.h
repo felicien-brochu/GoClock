@@ -45,8 +45,8 @@ public:
 		playerOneWon = true;
 	}
 
-	virtual void addTime(long values[], uint8_t addTimeType, Clock *clock) {
-		uint32_t time = values[0] * 1000L;
+	virtual void addTime(int32_t time, uint8_t addTimeType, Clock *clock) {
+		time = time * 1000L;
 
 		switch (addTimeType) {
 		case ADD_TIME_OPTION_LEFT:
